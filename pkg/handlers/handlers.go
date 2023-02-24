@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/maantos/jwtAuth/initializers"
-	"github.com/maantos/jwtAuth/models"
+	"github.com/maantos/jwtAuth/pkg/db"
+	"github.com/maantos/jwtAuth/pkg/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -32,7 +32,7 @@ func SignUp(rw http.ResponseWriter, r *http.Request) {
 
 	object := models.User{Email: user.Email, Password: string(hashedPass)}
 
-	result := initializers.DB.Create(&object)
+	result := db.DB.Create(&object)
 
 	if result.Error != nil {
 		http.Error(rw, "failed to create user", http.StatusInternalServerError)

@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  authentication-service:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    restart: always
+    ports:
+      - "8080:3000"
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      DB: "host=postgres port=5432 user=postgres password=password dbname=auth sslmode=disable timezone=UTC connect_timeout=5"
+      SECRET: ItsAsecret
+      PORT: 3000
+
+  postgres:
+    image: 'postgres:latest'
+    ports:
+      - "5432:5432"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: users
+    volumes:
+      - ./db-data/:/var/lib/postgresql/data
+
+volumes:
+  db-data:

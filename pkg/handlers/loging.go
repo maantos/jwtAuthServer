@@ -8,8 +8,9 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/maantos/jwtAuth/initializers"
-	"github.com/maantos/jwtAuth/models"
+	"github.com/maantos/jwtAuth/pkg/db"
+	"github.com/maantos/jwtAuth/pkg/models"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -27,7 +28,7 @@ func Login(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var user models.User
-	initializers.DB.First(&user, "email = ?", body.Email)
+	db.DB.First(&user, "email = ?", body.Email)
 
 	if user.ID == 0 {
 		http.Error(rw, "invalid email or password", http.StatusBadRequest)

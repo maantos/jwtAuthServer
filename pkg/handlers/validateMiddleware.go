@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/maantos/jwtAuth/initializers"
-	"github.com/maantos/jwtAuth/models"
+	"github.com/maantos/jwtAuth/pkg/db"
+	"github.com/maantos/jwtAuth/pkg/models"
 )
 
 func Test(rw http.ResponseWriter, r *http.Request) {
@@ -59,7 +59,7 @@ func MyMiddleware(next http.Handler) http.Handler {
 			}
 
 			var user models.User
-			initializers.DB.First(&user, claims["sub"])
+			db.DB.First(&user, claims["sub"])
 			if user.ID == 0 {
 				w.WriteHeader(http.StatusUnauthorized)
 				return
